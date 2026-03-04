@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: project-released
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://gitlab.com/repo8754932/final-project-moria-deri
+    targetRevision: HEAD
+    path: ./myapp
+    helm:
+      parameters:
+        - name: image.repository
+          value: moria3/project_image
+        - name: image.tag
+          value: latest
+        - name: image.pullPolicy
+          value: Always
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
